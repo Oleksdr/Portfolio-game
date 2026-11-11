@@ -1,0 +1,115 @@
+@use "tokens" as *;
+
+.hero {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: min(820px, 62vw);
+  padding: clamp(6.5rem, 15vh, 9rem) clamp(1.25rem, 5vw, 5rem) 2rem;
+}
+
+.hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .4rem 1rem .4rem .75rem;
+  margin-bottom: 1.25rem;
+  @include panel(3px);
+  border-radius: 999px;
+  font-size: .95rem;
+  font-weight: 700;
+  sup { font-size: .65em; line-height: 0; }
+}
+
+.status-dot {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid $ink;
+  background: #3FD07A;
+}
+
+.hero-name {
+  @include manga-title;
+  font-size: clamp(3rem, 8.5vw, 8rem);
+  line-height: .9;
+  -webkit-text-stroke: 4px $ink;
+  text-shadow: 6px 6px 0 $ink;
+  span { display: block; }
+  span:last-child { color: var(--hi); }
+}
+
+.hero-lead {
+  display: inline-block;
+  margin-top: 1.1rem;
+  padding: .45rem .9rem;
+  @include panel(3px);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 700;
+  transform: rotate(-1deg);
+}
+
+.hero-play {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 1.75rem;
+}
+
+// Bulle de dialogue
+.hero-hint {
+  position: relative;
+  max-width: 44ch;
+  padding: .9rem 1.1rem;
+  @include panel(4px);
+  border-radius: 18px;
+  font-size: .98rem;
+  &::after {
+    content: "";
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    width: 22px;
+    height: 22px;
+    background: $paper;
+    border-right: 3px solid $ink;
+    border-top: 3px solid $ink;
+    transform: translateY(-50%) rotate(45deg) skew(12deg, 12deg);
+  }
+}
+
+.hint-touch { display: none; }
+@media (pointer: coarse) {
+  .hint-touch { display: block; }
+  .hint-keys { display: none; }
+}
+
+@media (max-width: $bp-md) {
+  .hero { width: 100%; padding: 5.8rem 1.25rem 0; }
+  .hero-name { font-size: clamp(2.6rem, 13vw, 4rem); -webkit-text-stroke: 3px $ink; text-shadow: 4px 4px 0 $ink; }
+  .hero-hint { font-size: .9rem; &::after { display: none; } }
+}
+
+// Petits écrans en hauteur
+@media (max-width: $bp-md) and (max-height: 700px) {
+  .hero { padding-top: calc(4.8rem + env(safe-area-inset-top)); }
+  .hero-status { font-size: .8rem; margin-bottom: .8rem; }
+  .hero-name { font-size: clamp(2.3rem, 11.5vw, 3.2rem); }
+  .hero-lead { font-size: .9rem; margin-top: .7rem; }
+  .hero-play { margin-top: .9rem; gap: .7rem; }
+  .hero-hint { font-size: .82rem; padding: .7rem .9rem; }
+}
+
+// Téléphone en paysage
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero { width: 60vw; padding: calc(3.9rem + env(safe-area-inset-top)) 1rem 0 max(1.25rem, env(safe-area-inset-left)); }
+  .hero-status { font-size: .75rem; margin-bottom: .5rem; padding: .25rem .7rem .25rem .55rem; }
+  .hero-name { font-size: clamp(1.9rem, 12vh, 3rem); -webkit-text-stroke: 2.5px $ink; text-shadow: 3px 3px 0 $ink; }
+  .hero-lead { font-size: .82rem; margin-top: .5rem; padding: .3rem .7rem; }
+  .hero-play { margin-top: .6rem; flex-wrap: nowrap; align-items: flex-start; }
+  .hero-hint { font-size: .78rem; padding: .55rem .8rem; max-width: 46ch; &::after { display: none; } }
+  .btn-solid { font-size: 1.05rem; padding: .5rem 1rem; min-height: 40px; }
+}

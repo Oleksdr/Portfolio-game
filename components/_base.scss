@@ -1,0 +1,167 @@
+@use "tokens" as *;
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, h1, h2, h3, p, ul, ol, dl, dd { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+svg { display: block; max-width: 100%; }
+button, input, textarea { font: inherit; color: inherit; }
+a { color: inherit; }
+
+html[lang="fr"] [data-l="en"], html[lang="en"] [data-l="fr"] { display: none !important; }
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+body {
+  background: #4F9DFF;
+  color: $ink;
+  font-family: $font;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-variation-settings: "wdth" 100;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--hi); color: $ink; }
+
+:focus-visible {
+  outline: 3px solid $ink;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--hi);
+  border-radius: 6px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -100px;
+  z-index: 3000;
+  padding: .6rem 1rem;
+  @include panel(3px);
+  text-decoration: none;
+  &:focus { top: 1rem; }
+}
+
+.title {
+  font-family: $manga;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 3vw, 2.8rem);
+  line-height: 1;
+  letter-spacing: .02em;
+}
+
+h3 { line-height: 1.15; }
+
+kbd {
+  display: inline-block;
+  min-width: 1.7em;
+  padding: .05em .4em;
+  border: 2px solid $ink;
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: .85em;
+  font-weight: 700;
+  text-align: center;
+  background: $white;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: .7rem 1.5rem;
+  border-radius: 12px;
+  border: 3px solid $ink;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 $ink;
+  transition: transform .12s ease, box-shadow .12s ease, background-color .2s ease;
+  &:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 $ink; }
+  &:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 $ink; }
+}
+
+.btn-solid {
+  background: var(--hi);
+  color: $ink;
+  font-family: $manga;
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: .04em;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  li {
+    padding: .2rem .75rem;
+    border: 2px solid $ink;
+    border-radius: 999px;
+    background: $white;
+    font-size: .9rem;
+    font-weight: 700;
+  }
+}
+
+#world, #speedlines {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+#world { z-index: 0; }
+#speedlines { z-index: 1; }
+
+// Trame de points façon manga, très légère
+.halftone {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba($ink, .16) 1px, transparent 1.3px);
+  background-size: 6px 6px;
+  mask-image: radial-gradient(130% 100% at 50% 40%, transparent 55%, #000 100%);
+  -webkit-mask-image: radial-gradient(130% 100% at 50% 40%, transparent 55%, #000 100%);
+}
+
+.track { display: block; }
+
+// Onomatopées
+.sfx-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 960;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sfx {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  font-family: $manga;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 1;
+  color: var(--hi);
+  -webkit-text-stroke: 3px $ink;
+  paint-order: stroke fill;
+  text-shadow: 5px 5px 0 $ink;
+  transform: translate(-50%, -50%) rotate(var(--r));
+  animation: sfxPop 1.05s cubic-bezier(.2, .9, .3, 1.4) forwards;
+  white-space: nowrap;
+  &.is-bonus { color: var(--accent); }
+  &.is-win { color: #FF5A5F; font-size: clamp(3rem, 8vw, 6.5rem); left: 40%; top: 30%; }
+}
+
+@keyframes sfxPop {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--r)) scale(.3); }
+  25% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--r)) scale(1.15); }
+  45% { transform: translate(-50%, -50%) rotate(var(--r)) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -60%) rotate(var(--r)) scale(1); }
+}

@@ -1,0 +1,37 @@
+@use "tokens" as *;
+
+// Affichage de secours, uniquement si la 3D est impossible sur l'appareil
+.no3d {
+  #world, #speedlines, .halftone, .hud, .alti, .pad, .track { display: none !important; }
+  body { background: linear-gradient(#4F9DFF, #FFA95E); background-attachment: fixed; }
+
+  .hero { position: static; width: auto; max-width: 1100px; margin: 0 auto; padding-bottom: 4rem; }
+  .hero-play { display: none; }
+
+  main {
+    position: static;
+    width: auto;
+    max-width: 1100px;
+    max-height: none;
+    margin: 0 auto 4rem;
+    overflow: visible;
+    padding: 0 1.25rem;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .group-title { display: block; margin: 4rem 0 1.5rem; @include manga-title; font-size: 3rem; }
+  .zone {
+    display: block;
+    margin-bottom: 1.25rem;
+    padding: 1.6rem;
+    @include panel(6px);
+  }
+  .zone-hint, .level-done, .project-count { display: none; }
+  .skill-chips li { opacity: 1; border-style: solid; }
+}

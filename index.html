@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="cyan">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Oleksandr Chekalovskyi · Portfolio jouable</title>
+    <meta name="description" content="Portfolio jouable d'Oleksandr Chekalovskyi, étudiant en BUT Informatique à l'IUT2 Grenoble Alpes. Montez vers l'espace avec Bit et découvrez ses compétences et ses projets.">
+    <meta name="author" content="Oleksandr Chekalovskyi">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Oleksandr Chekalovskyi · Portfolio jouable">
+    <meta property="og:description" content="Étudiant en BUT Informatique à Grenoble, futur développeur fullstack. En recherche de stage.">
+    <meta name="theme-color" content="#4F9DFF">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304061A'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='26' fill='%235FE1FF' text-anchor='middle'%3EOC%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Bangers&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="components/style.css">
+    <!-- Langue et couleur choisies (mémorisées), appliquées avant l'affichage -->
+    <script>
+        (function () {
+            var d = document.documentElement, lang = null, theme = null;
+            try { lang = localStorage.getItem('portfolio-lang'); theme = localStorage.getItem('portfolio-theme'); } catch (e) {}
+            if (!lang) lang = (navigator.language || 'fr').toLowerCase().indexOf('fr') === 0 ? 'fr' : 'en';
+            d.lang = lang === 'en' ? 'en' : 'fr';
+            if (theme) d.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <canvas id="world" aria-hidden="true"></canvas>
+    <canvas id="speedlines" aria-hidden="true"></canvas>
+    <div class="halftone" aria-hidden="true"></div>
+    <div class="sfx-layer" aria-hidden="true"></div>
+
+    <a class="skip-link" href="#main"><span data-l="fr">Aller au contenu</span><span data-l="en">Skip to content</span></a>
+
+    <header class="site-header">
+        <a class="brand" href="#top" data-goto="start" aria-label="Oleksandr Chekalovskyi">OC</a>
+        <nav class="site-nav" id="site-nav">
+            <a href="#about" data-goto="about"><span data-l="fr">À propos</span><span data-l="en">About</span></a>
+            <a href="#skills" data-goto="interface"><span data-l="fr">Compétences</span><span data-l="en">Skills</span></a>
+            <a href="#projects" data-goto="projets"><span data-l="fr">Projets</span><span data-l="en">Projects</span></a>
+            <a href="#contact" data-goto="contact">Contact</a>
+        </nav>
+        <div class="controls">
+            <div class="lang-switch" role="group" aria-label="Langue / Language">
+                <button type="button" data-lang-set="fr" lang="fr">FR</button>
+                <button type="button" data-lang-set="en" lang="en">EN</button>
+            </div>
+            <div class="theme-picker">
+                <button type="button" class="theme-btn" aria-expanded="false" aria-controls="theme-menu">
+                    <span class="theme-dot" aria-hidden="true"></span><span data-l="fr">Couleur</span><span data-l="en">Colour</span>
+                </button>
+                <div class="theme-menu" id="theme-menu" hidden><button type="button" class="swatch swatch-cyan" data-theme-set="cyan" aria-pressed="false"><span class="swatch-dot" aria-hidden="true"></span><span data-l="fr">Cyan</span><span data-l="en">Cyan</span></button><button type="button" class="swatch swatch-violet" data-theme-set="violet" aria-pressed="false"><span class="swatch-dot" aria-hidden="true"></span><span data-l="fr">Violet</span><span data-l="en">Violet</span></button><button type="button" class="swatch swatch-vert" data-theme-set="vert" aria-pressed="false"><span class="swatch-dot" aria-hidden="true"></span><span data-l="fr">Vert</span><span data-l="en">Green</span></button><button type="button" class="swatch swatch-orange" data-theme-set="orange" aria-pressed="false"><span class="swatch-dot" aria-hidden="true"></span><span data-l="fr">Orange</span><span data-l="en">Orange</span></button><button type="button" class="swatch swatch-rose" data-theme-set="rose" aria-pressed="false"><span class="swatch-dot" aria-hidden="true"></span><span data-l="fr">Rose</span><span data-l="en">Pink</span></button></div>
+            </div>
+            <div class="header-social">
+                <a href="https://github.com/Oleksdr" target="_blank" rel="noopener" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+            </a>
+                <a href="https://www.linkedin.com/in/oleksandr-chekalovskyi-381166309" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+            </a>
+            </div>
+        </div>
+        <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+            <span></span><span></span>
+        </button>
+    </header>
+
+    <!-- ===== Accueil (au sol) ===== -->
+    <section class="hero" id="top">
+        <p class="hero-status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span><span data-l="fr">En recherche de stage · BUT Informatique, 2<sup>e</sup>&nbsp;année</span><span data-l="en">Looking for an internship · 2nd-year BUT in Computer Science</span></span>
+        </p>
+        <h1 class="hero-name"><span>Oleksandr</span><span>Chekalovskyi</span></h1>
+        <p class="hero-lead"><span data-l="fr">Étudiant à l'IUT2 Grenoble Alpes, futur développeur fullstack.</span><span data-l="en">Student at IUT2 Grenoble Alpes, future full-stack developer.</span></p>
+        <div class="hero-play">
+            <p class="hero-hint hint-touch"><span data-l="fr">Faites glisser vers le haut pour décoller avec Bit et monter jusqu'à l'espace. Les boutons ◀ ▶ le déplacent, Turbo le propulse. En chemin, il ramasse mes compétences, casse les blocs info et ouvre mes projets.</span><span data-l="en">Swipe up to take off with Bit and fly into space. The ◀ ▶ buttons move him sideways, Turbo boosts him. On the way he collects my skills, breaks info blocks and opens my projects.</span></p>
+            <p class="hero-hint hint-keys"><span data-l="fr">Défilez pour décoller avec Bit et monter jusqu'à l'espace. <kbd>←</kbd> <kbd>→</kbd> pour vous déplacer, <kbd>Espace</kbd> pour le turbo. En chemin, il ramasse mes compétences, casse les blocs info et ouvre mes projets.</span><span data-l="en">Scroll to take off with Bit and fly up into space. <kbd>←</kbd> <kbd>→</kbd> to move sideways, <kbd>Space</kbd> for a turbo boost. On the way he collects my skills, breaks info blocks and opens my projects.</span></p>
+            <button class="btn btn-solid" type="button" data-goto="about"><span data-l="fr">Décoller</span><span data-l="en">Take off</span></button>
+        </div>
+    </section>
+
+    <!-- ===== Interface de jeu ===== -->
+    <div class="hud" aria-hidden="true">
+        <p class="hud-zone" data-hud-zone>Départ</p>
+        <p class="hud-place" data-hud-place>Le sol</p>
+        <div class="hud-counters">
+            <p class="hud-pill hud-coins"><span class="coin"></span><span data-hud-count>0</span>&nbsp;/&nbsp;<span data-hud-total>18</span>&nbsp;<span data-hud-skills-label>compétences</span></p>
+            <p class="hud-pill hud-bonus"><span class="info-cube">i</span><span data-hud-bonus>0</span>&nbsp;/&nbsp;<span data-hud-bonus-total>6</span>&nbsp;<span data-hud-info-label>blocs info</span></p>
+        </div>
+    </div>
+
+    <nav class="alti" aria-label="Altimètre / Altimeter">
+        <div class="alti-line"><span class="alti-fill"></span><span class="alti-bit" aria-hidden="true"></span></div>
+        <ol class="alti-nodes"></ol>
+    </nav>
+
+    <div class="pad" aria-hidden="true">
+        <button type="button" class="pad-btn" data-dir="-1" tabindex="-1">◀</button>
+        <button type="button" class="pad-btn pad-turbo" tabindex="-1">Turbo</button>
+        <button type="button" class="pad-btn" data-dir="1" tabindex="-1">▶</button>
+    </div>
+
+    <div class="toasts" role="status" aria-live="polite"></div>
+
+    <div class="loader" role="status" aria-live="polite">
+        <div class="loader-box">
+            <span class="loader-bit" aria-hidden="true"></span>
+            <p class="loader-text"><span data-l="fr">Chargement du niveau…</span><span data-l="en">Loading the level…</span></p>
+        </div>
+    </div>
+
+    <!-- ===== Contenu des panneaux ===== -->
+    <main id="main" tabindex="-1" data-lenis-prevent>
+
+        <section class="zone about" data-zone="about" id="about">
+            <h2 class="title"><span data-l="fr">À propos</span><span data-l="en">About</span></h2>
+            <p class="about-big"><span data-l="fr">Deuxième année de BUT Informatique à l'IUT2 de l'Université Grenoble Alpes. J'aime autant soigner une interface que comprendre ce qui se passe derrière.</span><span data-l="en">Second year of a BUT in Computer Science at IUT2, Université Grenoble Alpes. I enjoy polishing an interface as much as understanding what happens behind it.</span></p>
+            <p><span data-l="fr">Logique métier, structure des données, architecture&nbsp;: ce qui me motive, c'est de partir d'un besoin et d'aboutir à une application qui fonctionne vraiment. Les projets d'équipe de l'IUT, jusqu'à sept personnes, m'ont appris à recueillir ce besoin, à le découper et à livrer dans les délais.</span><span data-l="en">Business logic, data structures, architecture: what drives me is starting from a need and ending up with an application that really works. Team projects at the IUT, with up to seven people, taught me to gather requirements, break them down and deliver on time.</span></p>
+            <dl class="facts">
+                <div><dt><span data-l="fr">Basé à</span><span data-l="en">Based in</span></dt><dd>Grenoble, France</dd></div>
+                <div><dt><span data-l="fr">Formation</span><span data-l="en">Education</span></dt><dd><span data-l="fr">BUT Informatique, IUT2 Grenoble Alpes</span><span data-l="en">BUT in Computer Science, IUT2 Grenoble Alpes</span></dd></div>
+                <div><dt><span data-l="fr">Objectif</span><span data-l="en">Goal</span></dt><dd><span data-l="fr">Développeur fullstack</span><span data-l="en">Full-stack developer</span></dd></div>
+                <div><dt><span data-l="fr">Outils</span><span data-l="en">Tools</span></dt><dd>Git, GitHub, GitLab, IntelliJ IDEA, VS Code, RStudio, Whimsical</dd></div>
+            </dl>
+        </section>
+
+        <section class="group skills" id="skills">
+            <h2 class="title group-title"><span data-l="fr">Compétences</span><span data-l="en">Skills</span></h2>
+            <div class="layers">
+                <article class="zone layer" data-zone="interface" id="interface">
+                    <p class="zone-step"><span data-l="fr">Couche 1 sur 4</span><span data-l="en">Layer 1 of 4</span></p>
+                    <h3><span data-l="fr">Interface</span><span data-l="en">Interface</span></h3>
+                    <p><span data-l="fr">Ce que l'utilisateur voit et manipule. Des pages propres, lisibles et fidèles à la maquette.</span><span data-l="en">What users see and interact with. Clean, readable pages that stay true to the mockup.</span></p>
+                    <ul class="chips skill-chips"><li data-skill="html">HTML</li><li data-skill="css">CSS / Sass</li><li data-skill="js">JavaScript</li><li data-skill="javafx">JavaFX</li><li data-skill="maquettage"><span data-l="fr">Maquettage</span><span data-l="en">Wireframing</span></li></ul>
+                    <p class="zone-hint"><span data-l="fr">Traversez les compétences en vol pour les débloquer.</span><span data-l="en">Fly through the skills to unlock them.</span></p>
+                </article>
+                <article class="zone layer" data-zone="logique" id="logique">
+                    <p class="zone-step"><span data-l="fr">Couche 2 sur 4</span><span data-l="en">Layer 2 of 4</span></p>
+                    <h3><span data-l="fr">Logique</span><span data-l="en">Logic</span></h3>
+                    <p><span data-l="fr">Les règles métier et les traitements. Du code structuré en objets, testé et maintenable.</span><span data-l="en">Business rules and processing. Object-oriented code that is structured, tested and maintainable.</span></p>
+                    <ul class="chips skill-chips"><li data-skill="java">Java</li><li data-skill="php">PHP</li><li data-skill="cpp">C++</li><li data-skill="c">C</li><li data-skill="poo"><span data-l="fr">Programmation objet</span><span data-l="en">Object-oriented programming</span></li></ul>
+                    <p class="zone-hint"><span data-l="fr">Traversez les compétences en vol pour les débloquer.</span><span data-l="en">Fly through the skills to unlock them.</span></p>
+                </article>
+                <article class="zone layer" data-zone="donnees" id="donnees">
+                    <p class="zone-step"><span data-l="fr">Couche 3 sur 4</span><span data-l="en">Layer 3 of 4</span></p>
+                    <h3><span data-l="fr">Données</span><span data-l="en">Data</span></h3>
+                    <p><span data-l="fr">Modéliser, stocker et interroger. Des schémas relationnels et des requêtes qui vont droit au but.</span><span data-l="en">Modelling, storing and querying. Relational schemas and queries that get straight to the point.</span></p>
+                    <ul class="chips skill-chips"><li data-skill="sql">SQL</li><li data-skill="postgresql">PostgreSQL</li><li data-skill="modelisation"><span data-l="fr">Modélisation</span><span data-l="en">Data modelling</span></li><li data-skill="r">R</li></ul>
+                    <p class="zone-hint"><span data-l="fr">Traversez les compétences en vol pour les débloquer.</span><span data-l="en">Fly through the skills to unlock them.</span></p>
+                </article>
+                <article class="zone layer" data-zone="systeme" id="systeme">
+                    <p class="zone-step"><span data-l="fr">Couche 4 sur 4</span><span data-l="en">Layer 4 of 4</span></p>
+                    <h3><span data-l="fr">Système</span><span data-l="en">System</span></h3>
+                    <p><span data-l="fr">Là où l'application tourne. Un serveur Linux installé et configuré en ligne de commande.</span><span data-l="en">Where the application runs. A Linux server installed and configured from the command line.</span></p>
+                    <ul class="chips skill-chips"><li data-skill="linux">Linux</li><li data-skill="bash">Bash</li><li data-skill="ssh">SSH</li><li data-skill="apache">Apache</li></ul>
+                    <p class="zone-hint"><span data-l="fr">Traversez les compétences en vol pour les débloquer.</span><span data-l="en">Fly through the skills to unlock them.</span></p>
+                </article>
+            </div>
+        </section>
+
+        <section class="group projects" id="projects">
+            <h2 class="title group-title"><span data-l="fr">Projets</span><span data-l="en">Projects</span></h2>
+            <div class="project-list">
+                <article class="zone project" data-zone="projets" data-project="0">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><rect x="14" y="40" width="70" height="52" rx="8"/><path d="M14 54h70"/><rect x="156" y="30" width="70" height="40" rx="8"/><rect x="156" y="78" width="70" height="40" rx="8"/><path d="M84 66h72M146 58l10 8-10 8"/><ellipse cx="191" cy="136" rx="26" ry="7"/><path d="M165 136v-6M217 136v-6"/><path d="M191 118v11"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Application fullstack</span><span data-l="en">Full-stack application</span></span><span><span data-l="fr">7 personnes</span><span data-l="en">7 people</span></span></p>
+                    <h3><span data-l="fr">Application client-serveur sécurisée</span><span data-l="en">Secure client-server application</span></h3>
+                    <p><span data-l="fr">À partir d'un besoin client décrit en quelques lignes, une application client-serveur appuyée sur une base de données. Gestion de projet en quatre phases, avec un objectif de qualité&nbsp;: ergonomie, tests, sécurité.</span><span data-l="en">Starting from a client need described in a few lines, a client-server application backed by a database. Managed in four phases with a quality goal: usability, testing, security.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">recueil des besoins et modélisation (cas d'utilisation, maquettes, modèle de données), développement C++, PHP et JavaScript sur base SQL, tests, sécurité et soutenances.</span><span data-l="en">requirements gathering and modelling (use cases, mockups, data model), development in C++, PHP and JavaScript on an SQL database, testing, security and presentations.</span></p>
+                    <ul class="chips"><li>C++</li><li>PHP</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>SQL</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 1 sur 7</span><span data-l="en">Project 1 of 7</span></p>
+                </article>
+                <article class="zone project" data-zone="projets" data-project="1">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><rect x="30" y="22" width="180" height="116" rx="10"/><path d="M30 42h180M78 42v96"/><path d="M42 60h24M42 74h24M42 88h18"/><rect x="92" y="56" width="104" height="30" rx="5"/><rect x="92" y="94" width="48" height="30" rx="5"/><rect x="148" y="94" width="48" height="30" rx="5"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Application desktop</span><span data-l="en">Desktop application</span></span><span><span data-l="fr">5 personnes</span><span data-l="en">5 people</span></span></p>
+                    <h3><span data-l="fr">Application Java avec interface JavaFX</span><span data-l="en">Java application with a JavaFX interface</span></h3>
+                    <p><span data-l="fr">Une application desktop avec interface graphique, conçue en programmation orientée objet avec gestion des événements.</span><span data-l="en">A desktop application with a graphical interface, built with object-oriented programming and event handling.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">algorithmes de traitement des données et architecture objet (classes, héritage, encapsulation, polymorphisme).</span><span data-l="en">data-processing algorithms and object-oriented architecture (classes, inheritance, encapsulation, polymorphism).</span></p>
+                    <ul class="chips"><li>Java</li><li>JavaFX</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 2 sur 7</span><span data-l="en">Project 2 of 7</span></p>
+                </article>
+                <article class="zone project" data-zone="projets" data-project="2">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><rect x="30" y="20" width="180" height="120" rx="10"/><path d="M30 40h180"/><circle cx="44" cy="30" r="3"/><circle cx="56" cy="30" r="3"/><rect x="46" y="54" width="148" height="34" rx="5"/><path d="M46 102h60M46 114h44M134 102h60M134 114h40"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Site web</span><span data-l="en">Website</span></span><span><span data-l="fr">4 personnes</span><span data-l="en">4 people</span></span></p>
+                    <h3><span data-l="fr">Site web réalisé selon un cahier des charges</span><span data-l="en">Website built from a specification</span></h3>
+                    <p><span data-l="fr">Un site complet dont les fonctionnalités et le design étaient fixés par un cahier des charges précis, à respecter jusqu'à la livraison.</span><span data-l="en">A complete website whose features and design were set by a detailed specification, followed through to delivery.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">intégration de plusieurs pages en HTML et mise en forme complète en CSS, dans le respect de la charte graphique.</span><span data-l="en">built several pages in HTML and did all the CSS styling, following the brand guidelines.</span></p>
+                    <ul class="chips"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 3 sur 7</span><span data-l="en">Project 3 of 7</span></p>
+                </article>
+                <article class="zone project" data-zone="projets" data-project="3">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><rect x="22" y="30" width="76" height="96" rx="8"/><path d="M22 52h76M34 68h50M34 84h40M34 100h46"/><rect x="142" y="44" width="76" height="72" rx="8"/><path d="M142 66h76M154 82h46M154 98h36"/><path d="M98 76h22v8h22"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Base de données</span><span data-l="en">Database</span></span><span><span data-l="fr">2 personnes</span><span data-l="en">2 people</span></span></p>
+                    <h3><span data-l="fr">Conception d'une base de données relationnelle</span><span data-l="en">Relational database design</span></h3>
+                    <p><span data-l="fr">De la modélisation à l'interrogation&nbsp;: schéma, création des tables et requêtes de manipulation des données.</span><span data-l="en">From modelling to querying: schema, table creation and data manipulation queries.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">définition du schéma et des tables, puis requêtes SQL avec filtres pour extraire des informations ciblées.</span><span data-l="en">defined the schema and tables, then wrote SQL queries with filters to extract targeted information.</span></p>
+                    <ul class="chips"><li>SQL</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 4 sur 7</span><span data-l="en">Project 4 of 7</span></p>
+                </article>
+                <article class="zone project" data-zone="projets" data-project="4">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><path d="M30 30h110a10 10 0 0 1 10 10v30a10 10 0 0 1-10 10H62l-18 14V80H30a10 10 0 0 1-10-10V40a10 10 0 0 1 10-10Z"/><path d="M210 82H110a10 10 0 0 0-10 10v24a10 10 0 0 0 10 10h66l18 12v-12h16a10 10 0 0 0 10-10V92a10 10 0 0 0-10-10Z"/><path d="M38 48h80M38 62h56M118 100h72M118 112h48"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Algorithmique</span><span data-l="en">Algorithms</span></span><span><span data-l="fr">2 personnes</span><span data-l="en">2 people</span></span></p>
+                    <h3><span data-l="fr">Chatbot qui apprend de nouvelles réponses</span><span data-l="en">Chatbot that learns new answers</span></h3>
+                    <p><span data-l="fr">Un chatbot en Java qui répond aux questions et, quand il ne connaît pas la réponse, la demande à l'utilisateur pour la retenir.</span><span data-l="en">A Java chatbot that answers questions and, when it doesn't know the answer, asks the user and remembers it.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">logique de dialogue, gestion du dictionnaire de connaissances et mémorisation des nouvelles réponses.</span><span data-l="en">dialogue logic, knowledge dictionary management and storing new answers.</span></p>
+                    <ul class="chips"><li>Java</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 5 sur 7</span><span data-l="en">Project 5 of 7</span></p>
+                </article>
+                <article class="zone project" data-zone="projets" data-project="5">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><rect x="26" y="22" width="188" height="116" rx="10"/><path d="M26 42h188"/><path d="M42 62l12 10-12 10M62 84h30"/><path d="M42 104h96M42 120h64"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Système et réseau</span><span data-l="en">Systems and networks</span></span><span><span data-l="fr">Seul</span><span data-l="en">Solo</span></span></p>
+                    <h3><span data-l="fr">Serveur Linux sur machine virtuelle</span><span data-l="en">Linux server on a virtual machine</span></h3>
+                    <p><span data-l="fr">Installation d'une VM et déploiement de Linux en ligne de commande, puis mise en place des services réseau, des utilisateurs et des droits.</span><span data-l="en">Set up a VM and installed Linux from the command line, then configured network services, users and permissions.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">SSH pour l'accès à distance, Apache comme serveur web, PHP, PostgreSQL et phpPgAdmin pour administrer la base.</span><span data-l="en">SSH for remote access, Apache as the web server, PHP, PostgreSQL and phpPgAdmin to manage the database.</span></p>
+                    <ul class="chips"><li>Linux</li><li>Bash</li><li>SSH</li><li>Apache</li><li>PostgreSQL</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 6 sur 7</span><span data-l="en">Project 6 of 7</span></p>
+                </article>
+                <article class="zone project" data-zone="projets" data-project="6">
+                    <div class="project-visual" aria-hidden="true"><svg viewBox="0 0 240 160"><rect x="20" y="24" width="60" height="112" rx="8"/><rect x="90" y="24" width="60" height="112" rx="8"/><rect x="160" y="24" width="60" height="112" rx="8"/><path d="M30 40l40 30M70 40L30 70M100 40h40M100 52h28M170 40h40M170 112h40"/><path d="M80 80h10M150 80h10"/></svg></div>
+                    <p class="project-meta"><span><span data-l="fr">Conception UX</span><span data-l="en">UX design</span></span><span><span data-l="fr">4 personnes</span><span data-l="en">4 people</span></span></p>
+                    <h3><span data-l="fr">Maquettes fil de fer d'une application</span><span data-l="en">Wireframes for an application</span></h3>
+                    <p><span data-l="fr">Structurer l'interface et la navigation d'une application avant d'écrire la moindre ligne de code.</span><span data-l="en">Structuring an app's interface and navigation before writing a single line of code.</span></p>
+                    <p class="project-role"><strong><span data-l="fr">Mon rôle&nbsp;:</span><span data-l="en">My role:</span></strong> <span data-l="fr">maquettes de plusieurs écrans sur Whimsical&nbsp;: navigation, composants et hiérarchie des pages.</span><span data-l="en">wireframes for several screens in Whimsical: navigation, components and page hierarchy.</span></p>
+                    <ul class="chips"><li>Whimsical</li></ul>
+                    <p class="zone-step project-count"><span data-l="fr">Projet 7 sur 7</span><span data-l="en">Project 7 of 7</span></p>
+                </article>
+            </div>
+        </section>
+
+        <section class="zone contact" data-zone="contact" id="contact">
+            <p class="level-done"><span data-l="fr">Mission accomplie&nbsp;: merci d'avoir joué.</span><span data-l="en">Mission complete: thanks for playing.</span></p>
+            <h2 class="title"><span data-l="fr">Un stage à proposer&nbsp;?</span><span data-l="en">Got an internship to offer?</span></h2>
+            <p><span data-l="fr">Une offre, une question sur un projet ou simplement envie d'échanger&nbsp;: écrivez-moi ici ou retrouvez-moi sur LinkedIn.</span><span data-l="en">An offer, a question about a project, or just want to chat? Write to me here or find me on LinkedIn.</span></p>
+            <ul class="contact-links">
+                <li><a href="https://www.linkedin.com/in/oleksandr-chekalovskyi-381166309" target="_blank" rel="noopener">LinkedIn</a></li>
+                <li><a href="https://github.com/Oleksdr" target="_blank" rel="noopener">GitHub</a></li>
+            </ul>
+            <form class="contact-form" novalidate>
+                <div class="field">
+                    <label for="f-name"><span data-l="fr">Nom</span><span data-l="en">Name</span></label>
+                    <input id="f-name" type="text" name="name" autocomplete="name" required>
+                </div>
+                <div class="field">
+                    <label for="f-email">Email</label>
+                    <input id="f-email" type="email" name="email" autocomplete="email" required>
+                </div>
+                <div class="field">
+                    <label for="f-message">Message</label>
+                    <textarea id="f-message" name="message" rows="4" required></textarea>
+                </div>
+                <button class="btn btn-solid" type="submit"><span data-l="fr">Envoyer le message</span><span data-l="en">Send message</span></button>
+                <p class="form-status" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <!-- Sur téléphone : déplier / replier le panneau -->
+        <button class="sheet-toggle" type="button" aria-expanded="false">
+            <span class="when-closed"><span data-l="fr">Lire la suite</span><span data-l="en">Read more</span> ▾</span>
+            <span class="when-open"><span data-l="fr">Réduire</span><span data-l="en">Show less</span> ▴</span>
+        </button>
+    </main>
+
+    <!-- Piste de défilement : sa hauteur fixe la longueur du vol -->
+    <div class="track" aria-hidden="true"></div>
+
+    <script src="js/vendor/lenis.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+    <script src="js/i18n.js" defer></script>
+    <script src="js/level.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/contact.js" defer></script>
+    <!-- Monde 3D : Three.js et la scène réunis dans un seul fichier local (aucune dépendance externe) -->
+    <script src="js/world.bundle.js" defer></script>
+</body>
+</html>

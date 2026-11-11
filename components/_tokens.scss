@@ -1,0 +1,48 @@
+// Style manga / BD : encre noire, papier crème, couleurs vives
+$ink: #14141F;
+$paper: #FFFBF0;
+$muted: #4B4B5E;
+$white: #FFFFFF;
+
+$font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+$manga: "Bangers", "Impact", "Arial Black", sans-serif;
+$bp-md: 900px;
+$bp-sm: 600px;
+
+@function a($var, $pct) {
+  @return color-mix(in srgb, var(#{$var}) #{$pct}, transparent);
+}
+
+// Case de BD : contour noir épais et ombre décalée
+@mixin panel($shadow: 5px) {
+  background: $paper;
+  color: $ink;
+  border: 3px solid $ink;
+  border-radius: 14px;
+  box-shadow: $shadow $shadow 0 $ink;
+}
+
+// Titre manga : lettres blanches cernées de noir
+@mixin manga-title {
+  font-family: $manga;
+  font-weight: 400;
+  letter-spacing: .02em;
+  color: $white;
+  -webkit-text-stroke: 2px $ink;
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 $ink;
+}
+
+:root, [data-theme="cyan"] { --accent: #2EC8FF; --accent-2: #3D6BFF; --hi: #FFC83D; }
+[data-theme="violet"] { --accent: #A77BFF; --accent-2: #6C5CFF; --hi: #FFC83D; }
+[data-theme="vert"]   { --accent: #34E39A; --accent-2: #1FB58F; --hi: #FFD166; }
+[data-theme="orange"] { --accent: #FF9A3D; --accent-2: #FF5A3D; --hi: #2EC8FF; }
+[data-theme="rose"]   { --accent: #FF6FC4; --accent-2: #B54BFF; --hi: #FFE066; }
+
+// Version foncée de l'accent, lisible sur le papier
+:root { --accent-ink: color-mix(in srgb, var(--accent) 45%, #14141F); }
+
+@mixin wide($w: 125, $wght: 800) {
+  font-variation-settings: "wdth" $w;
+  font-weight: $wght;
+}

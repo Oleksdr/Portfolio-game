@@ -1,0 +1,202 @@
+@use "tokens" as *;
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .9rem clamp(1rem, 3vw, 2rem);
+}
+
+.brand {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  @include panel(3px);
+  border-radius: 12px;
+  font-family: $manga;
+  font-size: 1.35rem;
+  letter-spacing: .04em;
+  text-decoration: none;
+  &:hover { background: var(--hi); }
+}
+
+.site-nav {
+  display: flex;
+  gap: .4rem;
+  margin-left: auto;
+  padding: .3rem;
+  @include panel(3px);
+  border-radius: 999px;
+  a {
+    padding: .35rem .85rem;
+    font-weight: 800;
+    font-size: .95rem;
+    text-decoration: none;
+    border-radius: 999px;
+    &:hover { background: var(--hi); }
+  }
+}
+
+.controls { display: flex; align-items: center; gap: .55rem; }
+
+.lang-switch {
+  display: inline-flex;
+  padding: 3px;
+  @include panel(3px);
+  border-radius: 999px;
+  button {
+    min-width: 40px;
+    padding: .3rem .55rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    font-weight: 900;
+    font-size: .82rem;
+    cursor: pointer;
+    &[aria-pressed="true"] { background: $ink; color: $paper; }
+  }
+}
+
+.theme-picker { position: relative; }
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .45rem .9rem;
+  @include panel(3px);
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: .88rem;
+  cursor: pointer;
+  &:hover { background: var(--hi); }
+}
+
+.theme-dot, .swatch-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid $ink;
+  background: conic-gradient(var(--accent) 0 50%, var(--accent-2) 0);
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + .6rem);
+  right: 0;
+  z-index: 1200;
+  display: grid;
+  gap: .2rem;
+  min-width: 170px;
+  padding: .45rem;
+  @include panel(4px);
+  &[hidden] { display: none; }
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .45rem .6rem;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  &:hover { background: rgba($ink, .08); }
+  &[aria-pressed="true"] { background: var(--hi); }
+}
+.swatch-cyan   { --accent: #2EC8FF; --accent-2: #3D6BFF; }
+.swatch-violet { --accent: #A77BFF; --accent-2: #6C5CFF; }
+.swatch-vert   { --accent: #34E39A; --accent-2: #1FB58F; }
+.swatch-orange { --accent: #FF9A3D; --accent-2: #FF5A3D; }
+.swatch-rose   { --accent: #FF6FC4; --accent-2: #B54BFF; }
+
+.header-social {
+  display: flex;
+  gap: .35rem;
+  a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    @include panel(3px);
+    border-radius: 10px;
+    &:hover { background: var(--hi); }
+  }
+  svg { width: 19px; height: 19px; }
+}
+
+.burger {
+  display: none;
+  position: relative;
+  width: 46px;
+  height: 46px;
+  @include panel(3px);
+  border-radius: 12px;
+  cursor: pointer;
+  span {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    height: 3px;
+    border-radius: 2px;
+    background: $ink;
+    transition: transform .25s ease, top .25s ease;
+  }
+  span:nth-child(1) { top: 15px; }
+  span:nth-child(2) { top: 24px; }
+}
+.menu-open .burger {
+  span:nth-child(1) { top: 19.5px; transform: rotate(45deg); }
+  span:nth-child(2) { top: 19.5px; transform: rotate(-45deg); }
+}
+
+@media (max-width: 1180px) { .header-social { display: none; } }
+
+@media (max-width: $bp-md) {
+  .site-header { gap: .45rem; }
+  .controls { margin-left: auto; gap: .4rem; }
+  .theme-btn { padding: .5rem; font-size: 0; gap: 0; .theme-dot { width: 20px; height: 20px; } }
+  .burger { display: block; }
+  .site-nav {
+    position: absolute;
+    top: calc(100% - .2rem);
+    left: .75rem;
+    right: .75rem;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: .5rem;
+    border-radius: 14px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+    a { padding: .85rem 1rem; font-size: 1.15rem; border-radius: 10px; }
+  }
+  .menu-open .site-nav { visibility: visible; opacity: 1; transform: none; }
+}
+
+// Encoche et coins arrondis des téléphones
+.site-header {
+  padding-top: max(.9rem, env(safe-area-inset-top));
+  padding-left: max(clamp(1rem, 3vw, 2rem), env(safe-area-inset-left));
+  padding-right: max(clamp(1rem, 3vw, 2rem), env(safe-area-inset-right));
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .site-header { padding-top: max(.5rem, env(safe-area-inset-top)); padding-bottom: .5rem; }
+  .brand, .burger { width: 40px; height: 40px; }
+  .burger span:nth-child(1) { top: 12px; }
+  .burger span:nth-child(2) { top: 21px; }
+  .menu-open .burger span:nth-child(1), .menu-open .burger span:nth-child(2) { top: 16.5px; }
+  .lang-switch button { min-width: 34px; padding: .2rem .45rem; }
+  .theme-btn { padding: .35rem; }
+  .site-nav a { padding: .55rem 1rem; font-size: 1rem; }
+}

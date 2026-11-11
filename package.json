@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-oleksandr-chekalovskyi",
+  "private": true,
+  "description": "Portfolio jouable : Bit décolle en jetpack et découvre mes compétences en montant vers l espace.",
+  "scripts": {
+    "build": "esbuild src/world.js --bundle --minify --format=iife --target=es2019 --outfile=js/world.bundle.js",
+    "css": "sass --no-source-map components/style.scss components/style.css"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "sass": "^1.80.0",
+    "three": "0.169.0"
+  }
+}
